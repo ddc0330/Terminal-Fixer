@@ -1,0 +1,36 @@
+# ===== Terminal Fixer Error Logger =====
+
+# Project Path
+export FIXER_PROJECT_DIR="/mnt/c/Users/ddc/terminal-fixer"
+
+# log DIR
+export FIXER_LOG_DIR="$FIXER_PROJECT_DIR/logs"
+mkdir -p "$FIXER_LOG_DIR"
+
+# Makes this variable accessible to all subshells and functions
+export FIXER_LOG_FILE="$FIXER_LOG_DIR/last_error.log"
+
+function record_last_command() {
+    export LAST_COMMAND="$BASH_COMMAND"
+}
+
+function capture_error() {
+    local exit_status=$?
+
+    if [ $exit_status -ne 0 ]; then  # if exit_status!= 0
+
+         # Re-execute the last command, redirecting only stderr, and capture the error output
+        local error_output=$(eval "$LAST_COMMAND" 2>&1 > /dev/null)
+
+        echo "[$(date)]" > "$FIXER_LOG_FILE"
+        echo "Command: $LAST_COMMAND" >> "$FIXER_LOG_FILE"
+        echo "Exit Status: $exit_status" >> "$FIXER_LOG_FILE"
+        echo "Error Output:" >> "$FIXER_LOG_FILE"
+        echo "$error_output" >> "$FIXER_LOG_FILE"
+    fi
+}
+
+trap 'record_last_command' DEBUG
+trap 'capture_error' ERR
+
+export PATH="$HOME/.local/bin:$PATH"
