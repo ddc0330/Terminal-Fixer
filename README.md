@@ -2,7 +2,7 @@
 
 **A debugging assistant for WSL/Linux users.**
 
-## ✨ Features
+## Features
 
 *   Auto capture last terminal error
 *   One-command AI fixing (Google Gemini 1.5 Flash)
@@ -13,14 +13,14 @@
 *   Ready for personal use and WSL users
 
 
-## 🟣 Requirements
+## Requirements
 
 *   Docker
 *   Docker Compose
 *   Google Gemini API Key
 
 
-## 🟣 Installation (Recommended)
+## Installation (Recommended)
 
 1.  Create working directory: `mkdir terminal-fixer; cd terminal-fixer`
 2.  Download Release Assets: `curl -LO https://github.com/ddc0330/terminal-fixer/releases/download/v1.0.0/terminal-fixer-release.zip; unzip terminal-fixer-release.zip`
@@ -30,13 +30,13 @@
     *   `vim .env`
     *   Set `GEMINI_API_KEY=your_actual_key`
 
-## 🟣 Normal Workflow
+## Normal Workflow
 
 1.  Trigger an error (e.g., `ls /notfound`)
 2.  Fix it: `fixerror` (Detects last error, checks local database, queries Gemini if not cached, saves if confirmed)
 
 
-## 🟣 Available Commands
+## Available Commands
 
 | Command             | Description                                      |
 |----------------------|--------------------------------------------------|
@@ -51,6 +51,6 @@
 | `fixerror --export json/md` | Export database to json/markdown                 |
 | `fixerror --import file.json` | Import errors from json file                   |
 
-## 🟣 Notes
+## Notes
 
 This tool is intended for personal or WSL users who frequently encounter terminal errors. It is lightweight, fully dockerized, and AI-powered.  If you need to contribute, fork this repo and use `Dockerfile` + `Makefile` to build.
