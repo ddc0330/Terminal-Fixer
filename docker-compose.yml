@@ -1,0 +1,16 @@
+version: '3.9'
+
+services:
+  fixerror:
+    image: ddc0330/terminal-fixer:latest   # 這裡改成你的 DockerHub image
+    container_name: fixerror
+    stdin_open: true
+    tty: true
+    volumes:
+      - fixerror-db:/app
+      - fixerror-logs:/app/logs
+    entrypoint: ["python", "fixerror.py"]
+
+volumes:
+  fixerror-db:
+  fixerror-logs:
