@@ -1,4 +1,0 @@
-[Command]      sudo apt install zip
-[Exit Code]    1
-[Error Output] 
-WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
