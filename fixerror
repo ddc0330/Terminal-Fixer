@@ -1,9 +1,2 @@
-#!/usr/bin/env python3
-
-# fixerror script
-from fixerror import main
-
-if __name__ == "__main__":
-    main()
-
-
+#!/bin/bash
+python3 /home/ddc/terminal-fixer/fixerror.py "$@"
