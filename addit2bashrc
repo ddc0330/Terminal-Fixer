@@ -1,7 +1,7 @@
 # ===== Terminal Fixer Error Logger =====
 
 # Project Path
-export FIXER_PROJECT_DIR="/mnt/c/Users/ddc/terminal-fixer"
+export FIXER_PROJECT_DIR="/home/ddc/terminal-fixer"
 
 # log DIR
 export FIXER_LOG_DIR="$FIXER_PROJECT_DIR/logs"
@@ -16,17 +16,13 @@ function record_last_command() {
 
 function capture_error() {
     local exit_status=$?
-
-    if [ $exit_status -ne 0 ]; then  # if exit_status!= 0
-
-         # Re-execute the last command, redirecting only stderr, and capture the error output
+    if [ $exit_status -ne 0 ]; then
         local error_output=$(eval "$LAST_COMMAND" 2>&1 > /dev/null)
-
-        echo "[$(date)]" > "$FIXER_LOG_FILE"
-        echo "Command: $LAST_COMMAND" >> "$FIXER_LOG_FILE"
-        echo "Exit Status: $exit_status" >> "$FIXER_LOG_FILE"
-        echo "Error Output:" >> "$FIXER_LOG_FILE"
-        echo "$error_output" >> "$FIXER_LOG_FILE"
+        {
+            echo "[Command]      $LAST_COMMAND"
+            echo "[Exit Code]    $exit_status"
+            echo "[Error Output] $error_output"           
+        } > "$FIXER_LOG_FILE"
     fi
 }
 
