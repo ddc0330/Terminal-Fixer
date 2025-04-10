@@ -179,7 +179,7 @@ def main():
     init_db()
     
     parser = argparse.ArgumentParser(description="Terminal Fixer - AI Powered Error Solution CLI")
-    parser.add_argument('--refresh', action='store_true', help="Force query AI without using cache")
+    parser.add_argument('--force', action='store_true', help="Force query AI without using cache")
     parser.add_argument('--history', action='store_true', help="Show all past solved errors")
     parser.add_argument('--add', action='store_true', help="Manually add error and solution to database")
     parser.add_argument('--delete', action='store_true', help="Delete an error record from database")
@@ -207,7 +207,7 @@ def main():
         export_db(args.export)
         return
     
-    # default is fixerror or fixerror --refresh
+    # default is fixerror or fixerror --force
     error_msg = read_last_error()
     error_msg = error_msg.rstrip('\n')
     if not error_msg:
@@ -220,21 +220,21 @@ def main():
     solution = None
     solution = search_solution(error_msg)
 
-    # -------- Case 1: DB 有快取且非 refresh --------
-    if solution and not args.refresh:
+    # -------- Case 1: DB 有快取且非 force --------
+    if solution and not args.force:
         print_solution(" Cached Solution ")
         print(solution)
         print(f"\033[92m=================================\033[0m")
         return
 
-    # -------- Case 2: refresh 或 DB 沒有 --------
+    # -------- Case 2: force 或 DB 沒有 --------
     print_solution(" Gemini Solution ")
     new_solution = ask_gemini(error_msg)
     print(new_solution)
     print(f"\033[92m=================================\033[0m")
 
     # -------- Case 2-1: 有快取情境下的安全覆蓋 --------
-    if solution and args.refresh:
+    if solution and args.force:
         confirm = input("A cached solution already exists. Do you want to overwrite it? (y/n): ")
         if confirm.strip().lower() == "y":
             save_solution(error_msg, new_solution)
