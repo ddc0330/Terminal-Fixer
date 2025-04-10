@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # 獲取腳本所在目錄的絕對路徑
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+REAL_PATH=$(readlink -f "$0")
+SCRIPT_DIR=$(dirname "$REAL_PATH")
 
 # 檢查是否有提供 API 金鑰
 if [ "$1" == "--api-key" ] && [ -n "$2" ]; then
@@ -10,4 +11,4 @@ if [ "$1" == "--api-key" ] && [ -n "$2" ]; then
 fi
 
 # 執行 fixerror.py
-python3 "$SCRIPT_DIR/fixerror.py" "$@"
+cd "$SCRIPT_DIR" && python3 "$SCRIPT_DIR/fixerror.py" "$@"
