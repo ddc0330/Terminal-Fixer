@@ -12,6 +12,11 @@ DB_PATH = "./fixerror.db"
 LOG_PATH = "./logs/last_error.log"
 load_dotenv()
 API_KEY = os.getenv("GEMINI_API_KEY")
+if not API_KEY:
+    print("❌ GEMINI_API_KEY not found in environment variables.")
+    print("Please set your API key in the .env file or as an environment variable.")
+    print("Example: GEMINI_API_KEY=your_api_key_here")
+    sys.exit(1)
 genai.configure(api_key=API_KEY)
 
 # init_db
@@ -40,8 +45,9 @@ def search_solution(error_msg):
 
 # request to gemini
 def ask_gemini(error_msg):
-    model = genai.GenerativeModel('models/gemini-1.5-flash')
-    prompt = f"""
+    try:
+        model = genai.GenerativeModel('models/gemini-1.5-flash')
+        prompt = f"""
 You are a Linux terminal expert.
 Given the following error message, directly provide the exact shell command(s) or specific steps to fix it.
 Do not explain the cause, reason, or theory. Only output the solution.
@@ -49,8 +55,12 @@ Do not explain the cause, reason, or theory. Only output the solution.
 Error:
 {error_msg}
 """
-    response = model.generate_content(prompt)
-    return response.text
+        response = model.generate_content(prompt)
+        return response.text
+    except Exception as e:
+        print(f"❌ Error when querying Gemini API: {str(e)}")
+        print("Please check your API key and internet connection.")
+        return None
 
 # save solution
 def save_solution(error_msg, solution):
@@ -209,6 +219,8 @@ def main():
     
     # default is fixerror or fixerror --force
     error_msg = read_last_error()
+    if error_msg is None:
+        return
     error_msg = error_msg.rstrip('\n')
     if not error_msg:
         return
@@ -230,6 +242,9 @@ def main():
     # -------- Case 2: force 或 DB 沒有 --------
     print_solution(" Gemini Solution ")
     new_solution = ask_gemini(error_msg)
+    if new_solution is None:
+        print("❌ Failed to get solution from Gemini API.")
+        return
     print(new_solution)
     print(f"\033[92m=================================\033[0m")
 

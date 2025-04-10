@@ -13,6 +13,7 @@ if command -v pip &> /dev/null; then
     echo "✅ Dependencies installed successfully"
 else
     echo "❌ pip command not found, please install Python and pip first"
+    echo "run: sudo apt update && sudo apt install -y python3 python3-pip"
     exit 1
 fi
 
@@ -88,16 +89,40 @@ fi
 # ============ Step 4: Set up .env file ============
 echo "Setting up .env file..."
 
+# Ask for API key
+echo "Please enter your Google Gemini API key:"
+read -r API_KEY
+
+if [ -z "$API_KEY" ]; then
+    echo "⚠️ No API key provided. You can set it later by editing the .env file."
+else
+    echo "✅ API key received."
+fi
+
+# Create .env file
 if [ ! -f "$SCRIPT_DIR/.env" ]; then
     if [ -f "$SCRIPT_DIR/.env.example" ]; then
         cp "$SCRIPT_DIR/.env.example" "$SCRIPT_DIR/.env"
         echo "✅ .env file created from .env.example"
-        echo "⚠️ Please edit $SCRIPT_DIR/.env file to set your Gemini API key"
     else
-        echo "⚠️ .env.example file not found, please create .env file manually"
+        echo "⚠️ .env.example file not found, creating .env file manually"
+        echo "GEMINI_API_KEY=" > "$SCRIPT_DIR/.env"
     fi
+fi
+
+# Update API key in .env file
+if [ -n "$API_KEY" ]; then
+    # Check if GEMINI_API_KEY already exists in .env
+    if grep -q "GEMINI_API_KEY=" "$SCRIPT_DIR/.env"; then
+        # Replace existing API key
+        sed -i "s/GEMINI_API_KEY=.*/GEMINI_API_KEY=$API_KEY/" "$SCRIPT_DIR/.env"
+    else
+        # Add API key to .env
+        echo "GEMINI_API_KEY=$API_KEY" >> "$SCRIPT_DIR/.env"
+    fi
+    echo "✅ API key set in .env file"
 else
-    echo "✅ .env file already exists"
+    echo "⚠️ Please edit $SCRIPT_DIR/.env file to set your Gemini API key"
 fi
 
 # ============ Step 5: Create log directory ============
