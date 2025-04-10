@@ -62,12 +62,32 @@ fi
 # ============ Step 3: Create Global Command ============
 echo "Creating global command..."
 
+# Create fixerror script
+cat > "$SCRIPT_DIR/fixerror" << 'EOF'
+#!/bin/bash
+
+# 獲取腳本所在目錄的絕對路徑
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+# 檢查是否有提供 API 金鑰
+if [ "$1" == "--api-key" ] && [ -n "$2" ]; then
+    export GEMINI_API_KEY="$2"
+    shift 2
+fi
+
+# 執行 fixerror.py
+python3 "$SCRIPT_DIR/fixerror.py" "$@"
+EOF
+
+# Make fixerror script executable
+chmod +x "$SCRIPT_DIR/fixerror"
+
 # Ensure fixerror.py has execution permission
 chmod +x "$SCRIPT_DIR/fixerror.py"
 
 # Create symbolic link to /usr/local/bin
 if [ -d "/usr/local/bin" ]; then
-    sudo ln -sf "$SCRIPT_DIR/fixerror.py" /usr/local/bin/fixerror
+    sudo ln -sf "$SCRIPT_DIR/fixerror" /usr/local/bin/fixerror
     echo "✅ Global command 'fixerror' created"
 else
     echo "⚠️ /usr/local/bin directory not found, trying ~/.local/bin"
@@ -82,7 +102,7 @@ else
     fi
     
     # Create symbolic link
-    ln -sf "$SCRIPT_DIR/fixerror.py" "$HOME/.local/bin/fixerror"
+    ln -sf "$SCRIPT_DIR/fixerror" "$HOME/.local/bin/fixerror"
     echo "✅ Global command 'fixerror' created in ~/.local/bin"
 fi
 
