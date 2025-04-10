@@ -8,24 +8,29 @@ from dotenv import load_dotenv
 import json
 
 #init
+# 獲取腳本所在目錄的絕對路徑（處理符號連結）
+SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
+print(f"Script directory: {SCRIPT_DIR}")
+
+# 切換到腳本所在目錄
+os.chdir(SCRIPT_DIR)
+print(f"Current working directory: {os.getcwd()}")
+
 DB_PATH = "./fixerror.db"
 LOG_PATH = "./logs/last_error.log"
 
-# 獲取腳本所在目錄的絕對路徑
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-ENV_PATH = os.path.join(SCRIPT_DIR, ".env")
-
-# 嘗試從腳本所在目錄載入 .env 檔案
-if os.path.exists(ENV_PATH):
-    print(f"✅ Loading .env file from {ENV_PATH}")
-    load_dotenv(ENV_PATH)
+# 優先從專案目錄讀取 .env
+env_path = os.path.join(SCRIPT_DIR, '.env')
+print(f"Looking for .env at: {env_path}")
+if os.path.exists(env_path):
+    print(f"Found .env file at: {env_path}")
+    load_dotenv(env_path)
 else:
-    # 如果找不到，嘗試從當前工作目錄載入
-    print(f"⚠️ .env file not found at {ENV_PATH}, trying current directory")
-    load_dotenv()
+    print(f"No .env file found at: {env_path}")
+    load_dotenv()  # 如果找不到，再嘗試其他位置
 
-# 檢查環境變數是否正確載入
 API_KEY = os.getenv("GEMINI_API_KEY")
+print(f"API Key: {API_KEY}")
 if not API_KEY:
     print("❌ GEMINI_API_KEY not found in environment variables.")
     print("Please set your API key in the .env file or as an environment variable.")
@@ -33,7 +38,6 @@ if not API_KEY:
     print("Or run: export GEMINI_API_KEY=your_api_key_here")
     sys.exit(1)
 
-print(f"✅ Using API key: {API_KEY[:5]}...{API_KEY[-5:]}")
 genai.configure(api_key=API_KEY)
 
 # init_db
