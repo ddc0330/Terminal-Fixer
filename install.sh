@@ -121,6 +121,10 @@ if [ -n "$API_KEY" ]; then
         echo "GEMINI_API_KEY=$API_KEY" >> "$SCRIPT_DIR/.env"
     fi
     echo "✅ API key set in .env file"
+    
+    # Also set it as an environment variable for the current session
+    export GEMINI_API_KEY="$API_KEY"
+    echo "✅ API key set as environment variable for the current session"
 else
     echo "⚠️ Please edit $SCRIPT_DIR/.env file to set your Gemini API key"
 fi
@@ -132,4 +136,6 @@ echo "✅ Log directory created"
 
 echo "===== Installation Complete ====="
 echo "Please run 'source $SHELL_RC' or restart your terminal to use the 'fixerror' command."
-echo "Before first use, make sure you have set your Gemini API key in the .env file." 
+echo "Before first use, make sure you have set your Gemini API key in the .env file."
+echo "If you encounter any issues with the API key, you can set it manually with:"
+echo "export GEMINI_API_KEY=your_api_key_here" 
