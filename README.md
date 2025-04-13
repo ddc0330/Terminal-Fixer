@@ -42,39 +42,26 @@ bash install.sh
 source ~/.bashrc
 ```
 
-4. Set up your Gemini API key:
-   - Edit the `.env` file
-   - Set `GEMINI_API_KEY=your_api_key_here`
+### Method 2: Docker Installation
 
-### Method 2: Docker Installation (Recommended)
-
-#### Requirements
-
-- Docker
-- Docker Compose
-- bash shell
-
-#### Installation Steps
-
-1. Create working directory:
+1. Pull the Docker image:
 ```bash
-mkdir terminal-fixer; cd terminal-fixer
+docker pull ddc0330/terminal-fixer:latest
 ```
 
-2. Download release assets:
+2. Run the installation script:
 ```bash
-curl -LO https://github.com/ddc0330/terminal-fixer/releases/download/v1.0.0/terminal-fixer-release.zip; unzip terminal-fixer-release.zip
+# For Linux/macOS
+chmod +x release/wsl-install.sh
+./release/wsl-install.sh
+source ~/.bashrc  # Reload shell configuration
+
+# For Windows (Run PowerShell as Administrator)
+Set-ExecutionPolicy Bypass -Scope Process -Force
+.\release\quick-start.ps1
 ```
 
-3. Setup:
-```bash
-bash install.sh; source ~/.bashrc
-```
-
-4. Set up your API key:
-   - `cp .env.example .env`
-   - `vim .env`
-   - Set `GEMINI_API_KEY=your_actual_key`
+Follow the prompts to complete the installation. After installation, restart your terminal or run `source ~/.bashrc` (Linux/macOS) to start using Terminal Fixer.
 
 ## Normal Workflow
 
