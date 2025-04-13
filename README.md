@@ -8,7 +8,7 @@
 *   One-command AI fixing (Google Gemini 1.5 Flash)
 *   Local SQLite database caching
 *   Custom error/solution management
-*   Export/Import error database
+*   Export error database
 *   Dockerized — no need to install Python
 *   Ready for personal use and WSL users
 
@@ -17,14 +17,6 @@
 This tool provides two installation methods: direct clone installation and Docker installation.
 
 ### Method 1: Direct Clone Installation 
-
-#### Requirements
-
-- Python 3.6 or higher
-- pip (Python package manager)
-- bash shell
-
-#### Installation Steps
 
 1. Clone this repository:
 ```bash
@@ -51,17 +43,15 @@ docker pull ddc0330/terminal-fixer:latest
 
 2. Run the installation script:
 ```bash
-# For Linux/macOS
+# For Linux
 chmod +x release/wsl-install.sh
 ./release/wsl-install.sh
-source ~/.bashrc  # Reload shell configuration
-
-# For Windows (Run PowerShell as Administrator)
-Set-ExecutionPolicy Bypass -Scope Process -Force
-.\release\quick-start.ps1
 ```
 
-Follow the prompts to complete the installation. After installation, restart your terminal or run `source ~/.bashrc` (Linux/macOS) to start using Terminal Fixer.
+3. Reload bash configuration:
+```bash
+source ~/.bashrc
+```
 
 ## Normal Workflow
 
@@ -72,7 +62,7 @@ Follow the prompts to complete the installation. After installation, restart you
 
 | Command             | Description                                      |
 |----------------------|--------------------------------------------------|
-| `fixerror --help`    | List all commands                                |
+| `fixerror -h, --help`    | List all commands                                |
 | `fixerror`           | Fix last error                                   |
 | `fixerror --force`   | Force query Gemini even if cached                 |
 | `fixerror --history` | View saved errors & solutions                     |
@@ -81,8 +71,10 @@ Follow the prompts to complete the installation. After installation, restart you
 | `fixerror --clear`   | Clear the entire database                         |
 | `fixerror --search "keyword"` | Search error history                            |
 | `fixerror --export json/md` | Export database to json/markdown                 |
-| `fixerror --import file.json` | Import errors from json file                   |
+## Future Plans
 
-## Notes
+1. **Import File Support**: Support importing error solutions from various file formats (JSON, YAML, CSV)
 
-This tool is intended for personal or WSL users who frequently encounter terminal errors. It is lightweight, fully dockerized, and AI-powered. If you need to contribute, fork this repo and use `Dockerfile` + `Makefile` to build.
+2. **Multi-Terminal Support**: Add support for different terminal emulators (zsh, fish, PowerShell)
+
+3.  **Direct Solution Execution**: Enable one-click execution of Gemini's suggested solutions
