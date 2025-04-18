@@ -20,7 +20,7 @@ This tool provides two installation methods: direct clone installation and Docke
 
 1. Clone this repository:
 ```bash
-git clone https://github.com/yourusername/terminal-fixer.git
+git clone https://github.com/ddc0330/terminal-fixer.git
 cd terminal-fixer
 ```
 
